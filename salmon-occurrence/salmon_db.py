@@ -9,7 +9,7 @@ class Region(Base):
     id = Column('region_id', Integer, primary_key=True)
     name=Column(String)
     code=Column(String)
-    type=Column(Enum("basin", "watershed"))
+    kind=Column(Enum("basin", "watershed"))
     boundary=Column(Geometry('POLYGON'))
     outlet=Column(Geometry('POINT'))
     
@@ -19,7 +19,7 @@ class Taxon(Base):
     id=Column('taxon_id', Integer, primary_key=True)
     common_name=Column(String)
     scientific_name=Column(String)
-    subspecies=Column(String)
+    subgroup=Column(String)
     
     
 class ConservationUnit(Base):
@@ -34,16 +34,23 @@ class Reference(Base):
     __tablename__="reference"
     id=Column('reference_id', Integer, primary_key=True)
     code=Column(String)
-    cite=Column(String)
-    full=Column(String)
+    abbrev_cite=Column(String)
+    full_citation=Column(String)
     
-class TimeRange(Base):
-    __tablename__="time_range"
-    id=Column('time_range_id', Integer, primary_key=True)
+class Phenology(Base):
+    __tablename__="phenology"
+    id=Column('phenology_id', Integer, primary_key=True)
     minimum=Column(Float)
     maximum=Column(Float)
     mean=Column(Float)
     standard_deviation=Column(Float)
+    data_reference=Column(
+        Integer, 
+        ForeignKey("reference.reference_id"))
+    precise_time_reference=Column(
+        Integer, 
+        ForeignKey("reference.reference_id"))
+        
     
 class Population(Base):
     __tablename__="population"
@@ -58,20 +65,7 @@ class Population(Base):
     extinct=Column(Boolean)
     spawn_time_range=Column(
         Integer,
-        ForeignKey("time_range.time_range_id"))
-    spawn_data_reference=Column(
-        Integer, 
-        ForeignKey("reference.reference_id"))
-    spawn_precise_time_reference=Column(
-        Integer, 
-        ForeignKey("reference.reference_id"))
+        ForeignKey("phenology.phenology_id"))
     migration_time_range=Column(
         Integer,
-        ForeignKey("time_range.time_range_id"))
-    migration_data_reference=Column(
-        Integer, 
-        ForeignKey("reference.reference_id"))
-    migration_precise_time_reference=Column(
-        Integer, 
-        ForeignKey("reference.reference_id"))
- 
+        ForeignKey("phenology.phenology_id"))
