@@ -9,7 +9,7 @@ class Region(Base):
     id = Column('region_id', Integer, primary_key=True)
     name=Column(String)
     code=Column(String)
-    kind=Column(Enum("basin", "watershed"))
+    kind=Column(Enum("basin", "watershed", name="region_kinds"))
     boundary=Column(Geometry('POLYGON'))
     outlet=Column(Geometry('POINT'))
     
