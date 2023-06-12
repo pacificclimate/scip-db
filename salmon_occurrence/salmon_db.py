@@ -51,10 +51,10 @@ class Phenology(Base):
     standard_deviation=Column(Float)
     data_reference=Column(
         Integer, 
-        ForeignKey("reference.reference_id"))
+        ForeignKey("salmon_geometry.reference.reference_id"))
     precise_time_reference=Column(
         Integer, 
-        ForeignKey("reference.reference_id"))
+        ForeignKey("salmon_geometry.reference.reference_id"))
         
     
 class Population(Base):
@@ -63,15 +63,15 @@ class Population(Base):
     id=Column('population_id', Integer, primary_key=True)
     taxon_id=Column(
         Integer,
-        ForeignKey('taxon.taxon_id'))
+        ForeignKey('salmon_geometry.taxon.taxon_id'))
     conservation_unit_id=Column(
         Integer,
-        ForeignKey('conservation_unit.conservation_unit_id'))
+        ForeignKey('salmon_geometry.conservation_unit.conservation_unit_id'))
     overwinter=Column(Boolean)
     extinct=Column(Boolean)
     spawn_time_range=Column(
         Integer,
-        ForeignKey("phenology.phenology_id"))
+        ForeignKey("salmon_geometry.phenology.phenology_id"))
     migration_time_range=Column(
         Integer,
-        ForeignKey("phenology.phenology_id"))
+        ForeignKey("salmon_geometry.phenology.phenology_id"))
