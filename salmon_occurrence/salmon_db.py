@@ -6,6 +6,7 @@ Base = declarative_base()
 
 class Region(Base):
     __tablename__="region"
+    __table_args__ = {'schema': 'salmon_geometry'}
     id = Column('region_id', Integer, primary_key=True)
     name=Column(String)
     code=Column(String)
@@ -16,6 +17,7 @@ class Region(Base):
     
 class Taxon(Base):
     __tablename__="taxon"
+    __table_args__ = {'schema': 'salmon_geometry'}
     id=Column('taxon_id', Integer, primary_key=True)
     common_name=Column(String)
     scientific_name=Column(String)
@@ -24,6 +26,7 @@ class Taxon(Base):
     
 class ConservationUnit(Base):
     __tablename__="conservation_unit"
+    __table_args__ = {'schema': 'salmon_geometry'}
     id=Column('conservation_unit_id', Integer, primary_key=True)
     name=Column(String)
     code=Column(String)
@@ -32,6 +35,7 @@ class ConservationUnit(Base):
     
 class Reference(Base):
     __tablename__="reference"
+    __table_args__ = {'schema': 'salmon_geometry'}
     id=Column('reference_id', Integer, primary_key=True)
     code=Column(String)
     abbrev_cite=Column(String)
@@ -39,6 +43,7 @@ class Reference(Base):
     
 class Phenology(Base):
     __tablename__="phenology"
+    __table_args__ = {'schema': 'salmon_geometry'}
     id=Column('phenology_id', Integer, primary_key=True)
     minimum=Column(Float)
     maximum=Column(Float)
@@ -54,6 +59,7 @@ class Phenology(Base):
     
 class Population(Base):
     __tablename__="population"
+    __table_args__ = {'schema': 'salmon_geometry'}
     id=Column('population_id', Integer, primary_key=True)
     taxon_id=Column(
         Integer,
