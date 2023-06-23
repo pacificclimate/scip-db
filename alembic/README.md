@@ -3,5 +3,5 @@ These scripts allow mostly-automatic updating of the salmon occurrence database.
 To use:
 
 * edit the `sqlalchemy.url` connection string in `alembic.ini`, either to substitute in a password or to point to a different database
-* edit the `salmon_schema` variable in the migrations in the `versions` folder
+* optionally edit the `salmon_schema` variable in the migrations in the `versions` folder (the SCIP backend is currently hardwired to expect a schema named "salmon_geometry")
 * run alembic with `alembic upgrade head` to initialize or upgrade the database and schema you specified

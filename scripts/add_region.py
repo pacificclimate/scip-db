@@ -7,16 +7,16 @@
 # The kind of region (watershed, basin, conservation_unit) is supplied as an argument
 # to this script.
 #
-# Note that if a region is already in the database, defined as having the same code 
-# and the same kind as a region already in the database, this script will update the
-# name, boundary, and outlet of the feature to to match the new data.
+# Note that this script does not currently check to see if a region is already in
+# the database, so you can get duplicate versions! You will need to hand-delete
+# regions if you wish to add an updated one. Fixing this is a priority.
 
 import argparse
 import yaml
 from osgeo import ogr
 import logging
 import traceback
-from salmon_occurrence import Region
+from salmon_occurrence import Region, ConservationUnit
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import Session, sessionmaker
  
@@ -144,18 +144,27 @@ try:
         #if region consists of multiple polygons (island regions), skip it for now.
         #TODO: make multipolygons into some sort of merged shape.
         if fboundary.startswith("POLYGON"):
-            region = Region(
-                kind=args.kind,
-                name=fname,
-                code=fcode,
-                boundary=text("'{}'".format(fboundary)),
-                outlet=text("'{}'".format(foutlet))
-            )
+            to_add = None
+            if args.kind == "conservation_unit":
+                to_add = ConservationUnit(
+                    name=fname,
+                    code=fcode,
+                    boundary=text("'{}'".format(fboundary)),
+                    outlet=text("'{}'".format(foutlet))
+                )
+            else:
+                to_add = Region(
+                    kind=args.kind,
+                    name=fname,
+                    code=fcode,
+                    boundary=text("'{}'".format(fboundary)),
+                    outlet=text("'{}'".format(foutlet))
+                )
 
-            logger.info("Adding region {} {} outlet data".format(fname, "without" if foutlet == 'POINT EMPTY' else "with"))
+            logger.info("Adding {} {} {} outlet data".format(args.kind, fname, "without" if foutlet == 'POINT EMPTY' else "with"))
             
             if not args.dry:
-                session.add(region)
+                session.add(to_add)
                 session.commit()
             region_count = region_count + 1
         else:
